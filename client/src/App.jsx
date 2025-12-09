@@ -23,6 +23,11 @@ export default function App() {
     setProjects(prev => [created, ...prev]);
   };
 
+  const deleteProject = async (id) => {
+    const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+    if (res.status === 204) setProjects(prev => prev.filter(p => p._id !== id));
+  };
+
   return (
     <div style={{ maxWidth: 1024, margin: '0 auto', padding: 24 }}>
       <h1>MERN Portfolio</h1>
@@ -34,7 +39,7 @@ export default function App() {
       {tab === 'portfolio' ? (
         <>
           <AddProjectForm onAdd={addProject} />
-          <ProjectList items={projects} />
+          <ProjectList items={projects} onDelete={deleteProject} />
         </>
       ) : (
         <Builder />

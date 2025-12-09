@@ -8,6 +8,7 @@ export default function Builder() {
   const [title, setTitle] = useState('Mi Landing');
   const [blocks, setBlocks] = useState([]);
   const [pages, setPages] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     fetch('/api/pages').then(r => r.json()).then(setPages);
@@ -38,6 +39,32 @@ export default function Builder() {
     });
     const created = await res.json();
     setPages(prev => [created, ...prev]);
+    setSelectedId(created._id);
+  };
+
+  const load = async (id) => {
+    const data = await fetch(`/api/pages/${id}`).then(r => r.json());
+    setSelectedId(id);
+    setTitle(data.title || '');
+    setBlocks(Array.isArray(data.blocks) ? data.blocks : []);
+  };
+
+  const update = async () => {
+    if (!selectedId) return;
+    const res = await fetch(`/api/pages/${selectedId}`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, blocks })
+    });
+    const updated = await res.json();
+    setPages(prev => prev.map(p => p._id === updated._id ? updated : p));
+  };
+
+  const remove = async (id) => {
+    const res = await fetch(`/api/pages/${id}`, { method: 'DELETE' });
+    if (res.status === 204) {
+      setPages(prev => prev.filter(p => p._id !== id));
+      if (selectedId === id) { setSelectedId(null); setTitle('Mi Landing'); setBlocks([]); }
+    }
   };
 
   const html = useMemo(() => {
@@ -73,11 +100,18 @@ export default function Builder() {
         <BlockPalette onAdd={addBlock} />
         <div style={{ marginTop: 12 }}>
           <button onClick={save}>Guardar</button>
+          <button onClick={update} disabled={!selectedId} style={{ marginLeft: 8 }}>Actualizar</button>
         </div>
         <div style={{ marginTop: 12 }}>
           <div>Guardadas</div>
           <ul>
-            {pages.map(p => (<li key={p._id}>{p.title}</li>))}
+            {pages.map(p => (
+              <li key={p._id} style={{ display: 'flex', gap: 8 }}>
+                <span>{p.title}</span>
+                <button onClick={() => load(p._id)}>Cargar</button>
+                <button onClick={() => remove(p._id)}>Eliminar</button>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
