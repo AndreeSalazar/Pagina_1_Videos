@@ -1,6 +1,7 @@
 client/node_modules
 server/node_modules
 node_modules
+**/node_modules
 client/dist
 server/dist
 dist
@@ -26,3 +27,5 @@ server/.env*
 client/wasm/layout/pkg/
 client/wasm/layout/target/
 client/wasm/layout/Cargo.lock
+**/.next/
+**/.turbo/

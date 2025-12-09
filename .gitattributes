@@ -1,4 +1,4 @@
-* text=auto
+* text=auto eol=lf
 *.js text eol=lf
 *.jsx text eol=lf
 *.ts text eol=lf
@@ -7,6 +7,7 @@
 *.html text eol=lf
 *.json text eol=lf
 *.md text eol=lf
+*.env.example text eol=lf
 *.ps1 text eol=crlf
 *.cmd text eol=crlf
 *.bat text eol=crlf

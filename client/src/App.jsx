@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ProjectList from './components/ProjectList.jsx';
 import AddProjectForm from './components/AddProjectForm.jsx';
 import Builder from './builder/Builder.jsx';
+import Hub from './hub/Hub.jsx';
 
 export default function App() {
   const [health, setHealth] = useState(null);
@@ -35,14 +36,17 @@ export default function App() {
       <div style={{ display: 'flex', gap: 8, margin: '16px 0' }}>
         <button onClick={() => setTab('portfolio')}>Proyectos</button>
         <button onClick={() => setTab('builder')}>Landing Builder</button>
+        <button onClick={() => setTab('hub')}>Hub (YouTube + Discord)</button>
       </div>
       {tab === 'portfolio' ? (
         <>
           <AddProjectForm onAdd={addProject} />
           <ProjectList items={projects} onDelete={deleteProject} />
         </>
-      ) : (
+      ) : tab === 'builder' ? (
         <Builder />
+      ) : (
+        <Hub />
       )}
     </div>
   );
