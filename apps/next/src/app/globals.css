@@ -44,6 +44,7 @@ body.app-body { margin: 0; background: var(--bg); color: var(--text); font-famil
 .hub-toolbar { display: flex; gap: 8px; margin-bottom: 12px; }
 .hub-toolbar input { flex: 1; background: var(--bg-elev); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; }
 .hub-toolbar button { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+.hub-toolbar select { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
 
 .hub-form { display: grid; grid-template-columns: 1fr 1fr 1fr 120px; gap: 8px; margin-bottom: 12px; }
 .hub-form input { background: var(--bg-elev); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; }
@@ -53,10 +54,16 @@ body.app-body { margin: 0; background: var(--bg); color: var(--text); font-famil
 .video-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #121212; transition: transform .12s ease; }
 .video-card:hover { transform: translateY(-2px); }
 .thumb { aspect-ratio: 16/9; background: #000 center/cover; }
+.thumb { position: relative; }
 .card-body { padding: 10px; }
 .card-header { display: flex; justify-content: space-between; align-items: center; }
 .card-meta { color: var(--muted); font-size: 13px; }
 .card-delete { background: transparent; color: var(--danger); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; }
+
+.skeleton-thumb { background: linear-gradient(90deg, #121212 25%, #1c1c1c 37%, #121212 63%); background-size: 400% 100%; animation: shimmer 1.4s infinite; }
+.skeleton-line { height: 12px; background: linear-gradient(90deg, #121212 25%, #1c1c1c 37%, #121212 63%); background-size: 400% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; }
+.skeleton-btn { width: 64px; height: 24px; background: linear-gradient(90deg, #121212 25%, #1c1c1c 37%, #121212 63%); background-size: 400% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
 .watch { }
 .watch-player { aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
@@ -68,6 +75,9 @@ body.app-body { margin: 0; background: var(--bg); color: var(--text); font-famil
 .hub-chat .input button { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 12px; }
 
 .hub-chat .msg { margin-bottom: 10px; }
+.hub-chat .msg-row { display: grid; grid-template-columns: 28px 1fr; gap: 8px; }
+.hub-chat .msg-avatar { width: 28px; height: 28px; border-radius: 50%; background: #222; color: var(--text); display: grid; place-items: center; font-size: 12px; border: 1px solid var(--border); }
+.hub-chat .msg-col { display: flex; flex-direction: column; }
 .hub-chat .msg-header { display: flex; gap: 8px; align-items: baseline; }
 .hub-chat .msg-user { font-weight: 600; }
 .hub-chat .msg-time { color: var(--muted); font-size: 12px; }

@@ -17,14 +17,16 @@ function ChannelBar({ channels, selected, onSelect, onAdd }: any) {
 
 function VideoCard({ v, onPlay, onDelete }: any) {
   return (
-    <div style={{ border: '1px solid #222', borderRadius: 6, overflow: 'hidden' }}>
-      <div style={{ aspectRatio: '16/9', background: `url(${v.thumbnail}) center/cover` }} />
-      <div style={{ padding: 8 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div className="video-card">
+      <div className="thumb" style={{ backgroundImage: `url(${v.thumbnail})` }}>
+        <span className="card-meta" style={{ position: 'absolute', right: 8, bottom: 8, background: 'rgba(0,0,0,0.6)', padding: '2px 6px', borderRadius: 6 }}>{v.duration || '0:00'}</span>
+      </div>
+      <div className="card-body">
+        <div className="card-header">
           <strong style={{ cursor: 'pointer' }} onClick={() => onPlay(v._id)}>{v.title}</strong>
-          <button onClick={() => onDelete(v._id)}>Eliminar</button>
+          <button className="card-delete" onClick={() => onDelete(v._id)}>Eliminar</button>
         </div>
-        <div>{v.views} vistas · {v.likes} me gusta</div>
+        <div className="card-meta">{formatNum(v.views)} vistas · {timeAgo(v.ts)} · {formatNum(v.likes)} me gusta</div>
       </div>
     </div>
   );
@@ -86,14 +88,19 @@ export function HubChat({ channelId }: any) {
           const mm = String(t.getMinutes()).padStart(2,'0');
           return (
             <div key={m._id} className="msg">
-              <div className="msg-header"><strong className="msg-user">{m.user}</strong><span className="msg-time">{hh}:{mm}</span></div>
-              <div className="msg-content">{m.content}</div>
+              <div className="msg-row">
+                <div className="msg-avatar">{String(m.user||'')[0] || '?'}</div>
+                <div className="msg-col">
+                  <div className="msg-header"><strong className="msg-user">{m.user}</strong><span className="msg-time">{hh}:{mm}</span></div>
+                  <div className="msg-content">{m.content}</div>
+                </div>
+              </div>
             </div>
           );
         })}
       </div>
       <div style={{ padding: 8, display: 'flex', gap: 8 }}>
-        <input value={text} onChange={e => setText(e.target.value)} placeholder="Mensaje" style={{ flex: 1 }} />
+        <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key==='Enter') send(); }} placeholder="Mensaje" style={{ flex: 1 }} />
         <button onClick={send}>Enviar</button>
       </div>
     </div>
@@ -110,11 +117,13 @@ export default function HubClient() {
   const [current, setCurrent] = useState<any>(null);
   const [q, setQ] = useState('');
   const [newVideo, setNewVideo] = useState({ title: '', src: '', thumbnail: '' });
+  const [loadingVideos, setLoadingVideos] = useState(true);
+  const [sort, setSort] = useState<'relevantes'|'recientes'>('relevantes');
 
   useEffect(() => {
     const base = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
     fetch(`${base}/api/hub/channels`).then(r => r.json()).then(setChannels);
-    fetch(`${base}/api/hub/videos`).then(r => r.json()).then(setVideos);
+    fetch(`${base}/api/hub/videos`).then(r => r.json()).then(d => { setVideos(d); setLoadingVideos(false); });
     const initialQ = params.get('q') || '';
     if (initialQ) setQ(initialQ);
   }, [params]);
@@ -154,6 +163,8 @@ export default function HubClient() {
     let list = videos;
     if (selectedChannel) list = list.filter((v: any) => v.channelId === selectedChannel);
     if (text) list = list.filter((v: any) => v.title.toLowerCase().includes(text) || (v.description||'').toLowerCase().includes(text));
+    if (sort === 'recientes') list = [...list].sort((a: any, b: any) => (b.ts||0) - (a.ts||0));
+    else list = [...list].sort((a: any, b: any) => (b.views + (b.likes||0)*10) - (a.views + (a.likes||0)*10));
     return list;
   }, [videos, selectedChannel, q]);
 
@@ -170,6 +181,10 @@ export default function HubClient() {
       <div className="hub-content">
         <div className="hub-toolbar">
           <input value={q} onChange={e => setQ(e.target.value)} placeholder="Buscar" />
+          <select value={sort} onChange={e => setSort(e.target.value as any)}>
+            <option value="relevantes">Relevantes</option>
+            <option value="recientes">Recientes</option>
+          </select>
           {view === 'watch' ? <button onClick={() => setView('feed')}>Ir al feed</button> : null}
         </div>
         <div className="hub-form">
@@ -180,18 +195,21 @@ export default function HubClient() {
         </div>
         {view === 'feed' ? (
           <div className="video-grid">
-            {filtered.map((v: any, i: number) => (
-              <div className="video-card" key={v._id || i}>
-                <div className="thumb" style={{ backgroundImage: `url(${v.thumbnail})` }} />
-                <div className="card-body">
-                  <div className="card-header">
-                    <strong style={{ cursor: 'pointer' }} onClick={() => play(v._id)}>{v.title}</strong>
-                    <button className="card-delete" onClick={() => removeVideo(v._id)}>Eliminar</button>
+            {loadingVideos ? (
+              Array.from({ length: 6 }).map((_, i) => (
+                <div className="video-card" key={`s-${i}`}>
+                  <div className="thumb skeleton-thumb" />
+                  <div className="card-body">
+                    <div className="card-header"><div className="skeleton-line" style={{ width: '60%' }} /><div className="skeleton-btn" /></div>
+                    <div className="skeleton-line" style={{ width: '40%', marginTop: 6 }} />
                   </div>
-                  <div className="card-meta">{v.views} vistas · {v.likes} me gusta</div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              filtered.map((v: any, i: number) => (
+                <VideoCard key={v._id || i} v={v} onPlay={play} onDelete={removeVideo} />
+              ))
+            )}
           </div>
         ) : (
           <div className="watch">
@@ -209,4 +227,21 @@ export default function HubClient() {
       </div>
     </div>
   );
+}
+
+function formatNum(n: number) {
+  if (n >= 1_000_000) return `${(n/1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n/1_000).toFixed(1)}K`;
+  return String(n);
+}
+
+function timeAgo(ts?: number) {
+  if (!ts) return '';
+  const diff = Date.now() - ts;
+  const m = Math.floor(diff/60000);
+  if (m < 60) return `hace ${m} min`;
+  const h = Math.floor(m/60);
+  if (h < 24) return `hace ${h} h`;
+  const d = Math.floor(h/24);
+  return `hace ${d} días`;
 }

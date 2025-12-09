@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { randomUUID } from 'crypto';
 
 let videos = [
-  { _id: 'v1', title: 'Bienvenido', description: 'Intro al hub', src: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4', thumbnail: 'https://picsum.photos/seed/intro/400/225', channelId: 'c1', views: 120, likes: 5 },
-  { _id: 'v2', title: 'Demo MERN', description: 'Stack MERN', src: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4', thumbnail: 'https://picsum.photos/seed/mern/400/225', channelId: 'c2', views: 80, likes: 3 }
+  { _id: 'v1', title: 'Bienvenido', description: 'Intro al hub', src: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4', thumbnail: 'https://picsum.photos/seed/intro/400/225', channelId: 'c1', views: 120, likes: 5, duration: '1:02', ts: Date.now()-1000*60*60*24*5 },
+  { _id: 'v2', title: 'Demo MERN', description: 'Stack MERN', src: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4', thumbnail: 'https://picsum.photos/seed/mern/400/225', channelId: 'c2', views: 80, likes: 3, duration: '2:34', ts: Date.now()-1000*60*60*24*2 }
 ];
 let channels = [
   { _id: 'c1', name: 'General' },
@@ -34,9 +34,9 @@ router.post('/videos/:id/like', (req, res) => {
   res.json({ ok: true, likes: v.likes });
 });
 router.post('/videos', (req, res) => {
-  const { title, description, src, thumbnail, channelId } = req.body;
+  const { title, description, src, thumbnail, channelId, duration } = req.body;
   if (!title || !src) return res.status(400).json({ error: 'title y src requeridos' });
-  const v = { _id: randomUUID(), title, description, src, thumbnail, channelId, views: 0, likes: 0 };
+  const v = { _id: randomUUID(), title, description, src, thumbnail, channelId, views: 0, likes: 0, duration: duration || '0:30', ts: Date.now() };
   videos.unshift(v);
   res.status(201).json(v);
 });
