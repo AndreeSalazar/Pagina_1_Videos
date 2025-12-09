@@ -12,7 +12,7 @@ try { const m = await import('helmet'); helmetFn = m.default || m; } catch {}
 try { const m = await import('compression'); compressionFn = m.default || m; } catch {}
 if (helmetFn) app.use(helmetFn());
 if (compressionFn) app.use(compressionFn());
-app.use(cors({ origin: ['http://localhost:5173','http://localhost:3000','http://localhost:3001','http://localhost:4200'], methods: ['GET','POST','PUT','DELETE'], credentials: false }));
+app.use(cors({ origin: ['http://localhost:5173','http://localhost:3000','http://localhost:3001','http://localhost:3002','http://localhost:4200'], methods: ['GET','POST','PUT','DELETE'], credentials: false }));
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {

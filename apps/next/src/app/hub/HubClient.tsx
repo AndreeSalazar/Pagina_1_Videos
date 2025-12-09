@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from 'next/navigation';
 
 function ChannelBar({ channels, selected, onSelect, onAdd }: any) {
   return (
@@ -50,7 +51,7 @@ function Watch({ video, onBack }: any) {
   );
 }
 
-function Chat({ channelId }: any) {
+export function HubChat({ channelId }: any) {
   const [messages, setMessages] = useState<any[]>([]);
   const [text, setText] = useState('');
   const ref = useRef<HTMLDivElement>(null);
@@ -69,20 +70,27 @@ function Chat({ channelId }: any) {
   const send = async () => {
     const base = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
     if (!text.trim()) return;
-    await fetch(`${base}/api/hub/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ channelId, user: 'Tú', content: text }) });
+    let alias = 'Tú';
+    try { alias = localStorage.getItem('alias') || 'Tú'; } catch {}
+    await fetch(`${base}/api/hub/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ channelId, user: alias, content: text }) });
     setText('');
     const url = channelId ? `${base}/api/hub/messages?channelId=${channelId}` : `${base}/api/hub/messages`;
     fetch(url).then(r => r.json()).then(setMessages);
   };
   return (
     <div style={{ width: 320, borderLeft: '1px solid #222', display: 'flex', flexDirection: 'column' }}>
-      <div ref={ref} style={{ flex: 1, overflow: 'auto', padding: 8 }}>
-        {messages.map((m: any) => (
-          <div key={m._id} style={{ marginBottom: 8 }}>
-            <strong>{m.user}</strong>
-            <div>{m.content}</div>
-          </div>
-        ))}
+      <div ref={ref} className="list">
+        {messages.map((m: any) => {
+          const t = new Date(m.ts || Date.now());
+          const hh = String(t.getHours()).padStart(2,'0');
+          const mm = String(t.getMinutes()).padStart(2,'0');
+          return (
+            <div key={m._id} className="msg">
+              <div className="msg-header"><strong className="msg-user">{m.user}</strong><span className="msg-time">{hh}:{mm}</span></div>
+              <div className="msg-content">{m.content}</div>
+            </div>
+          );
+        })}
       </div>
       <div style={{ padding: 8, display: 'flex', gap: 8 }}>
         <input value={text} onChange={e => setText(e.target.value)} placeholder="Mensaje" style={{ flex: 1 }} />
@@ -93,6 +101,8 @@ function Chat({ channelId }: any) {
 }
 
 export default function HubClient() {
+  const router = useRouter();
+  const params = useSearchParams();
   const [channels, setChannels] = useState<any[]>([]);
   const [videos, setVideos] = useState<any[]>([]);
   const [selectedChannel, setSelectedChannel] = useState<string | null>(null);
@@ -105,7 +115,9 @@ export default function HubClient() {
     const base = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
     fetch(`${base}/api/hub/channels`).then(r => r.json()).then(setChannels);
     fetch(`${base}/api/hub/videos`).then(r => r.json()).then(setVideos);
-  }, []);
+    const initialQ = params.get('q') || '';
+    if (initialQ) setQ(initialQ);
+  }, [params]);
 
   const addChannel = async () => {
     const base = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
@@ -127,9 +139,8 @@ export default function HubClient() {
 
   const play = async (id: string) => {
     const base = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
-    const data = await fetch(`${base}/api/hub/videos/${id}`).then(r => r.json());
-    setCurrent(data);
-    setView('watch');
+    await fetch(`${base}/api/hub/videos/${id}/view`, { method: 'POST' });
+    router.push(`/watch/${id}`);
   };
 
   const removeVideo = async (id: string) => {
@@ -194,7 +205,7 @@ export default function HubClient() {
         )}
       </div>
       <div className="hub-chat">
-        <Chat channelId={selectedChannel} />
+        <HubChat channelId={selectedChannel} />
       </div>
     </div>
   );

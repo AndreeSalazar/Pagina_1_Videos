@@ -29,6 +29,10 @@ body.app-body { margin: 0; background: var(--bg); color: var(--text); font-famil
 
 .app-main { max-width: 1400px; margin: 0 auto; padding: 12px; }
 
+.profile { display: flex; align-items: center; gap: 8px; }
+.profile .alias { color: var(--muted); }
+.profile button { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; }
+
 /* Hub */
 .hub-container { display: grid; grid-template-columns: 80px 1fr 340px; gap: 0; height: calc(100vh - 56px); }
 .hub-sidebar { width: 80px; background: var(--bg-elev); border-right: 1px solid var(--border); padding: 8px; }
@@ -62,6 +66,12 @@ body.app-body { margin: 0; background: var(--bg); color: var(--text); font-famil
 .hub-chat .input { padding: 8px; display: flex; gap: 8px; }
 .hub-chat .input input { flex: 1; background: #111; border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; }
 .hub-chat .input button { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 12px; }
+
+.hub-chat .msg { margin-bottom: 10px; }
+.hub-chat .msg-header { display: flex; gap: 8px; align-items: baseline; }
+.hub-chat .msg-user { font-weight: 600; }
+.hub-chat .msg-time { color: var(--muted); font-size: 12px; }
+.hub-chat .msg-content { margin-top: 2px; }
 
 @media (max-width: 1024px) {
   .hub-container { grid-template-columns: 60px 1fr; }

@@ -21,6 +21,18 @@ router.get('/videos/:id', (req, res) => {
   if (!v) return res.status(404).json({ error: 'no encontrado' });
   res.json(v);
 });
+router.post('/videos/:id/view', (req, res) => {
+  const v = videos.find(x => x._id === req.params.id);
+  if (!v) return res.status(404).json({ error: 'no encontrado' });
+  v.views = (v.views || 0) + 1;
+  res.json({ ok: true, views: v.views });
+});
+router.post('/videos/:id/like', (req, res) => {
+  const v = videos.find(x => x._id === req.params.id);
+  if (!v) return res.status(404).json({ error: 'no encontrado' });
+  v.likes = (v.likes || 0) + 1;
+  res.json({ ok: true, likes: v.likes });
+});
 router.post('/videos', (req, res) => {
   const { title, description, src, thumbnail, channelId } = req.body;
   if (!title || !src) return res.status(400).json({ error: 'title y src requeridos' });
