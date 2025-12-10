@@ -98,11 +98,11 @@ export default function AppSidebar() {
       <div className="menu">
         <div className="menu-section">
           <div className="menu-title">Inicio</div>
-          <Link className="nav-item" href="/" onMouseMove={handleMove}>
+          <Link className={`nav-item ${pathname === '/' ? 'active' : ''}`} href="/" onMouseMove={handleMove}>
             <span className="nav-ico home" />
             <span className="nav-text">Principal</span>
           </Link>
-          <Link className="nav-item" href="/hub" onMouseMove={handleMove}>
+          <Link className={`nav-item ${pathname?.startsWith('/hub') ? 'active' : ''}`} href="/hub" onMouseMove={handleMove}>
             <span className="nav-ico shorts" />
             <span className="nav-text">Shorts</span>
           </Link>
@@ -113,7 +113,7 @@ export default function AppSidebar() {
         <div className="menu-section">
           <div className="menu-title">Suscripciones{currentCat ? ` · ${currentCat.name}` : ''}</div>
           {subs.map((c: any) => (
-            <button key={c._id} className="nav-item" aria-label={`Suscripción ${c.name}`} onMouseMove={handleMove} onClick={() => selectChannel(c._id)}>
+            <button key={c._id} className={`nav-item ${activeChannel===c._id ? 'active' : ''}`} aria-label={`Suscripción ${c.name}`} onMouseMove={handleMove} onClick={() => selectChannel(c._id)}>
               <span className="avatar" aria-hidden>{c.name[0]}</span>
               <span className="nav-text">{c.name}</span>
               <span className="live" />
@@ -135,7 +135,7 @@ export default function AppSidebar() {
           <button className="nav-item" onMouseMove={handleMove}><span className="nav-ico playlist" /><span className="nav-text">Playlists</span></button>
           <button className="nav-item" onMouseMove={handleMove}><span className="nav-ico later" /><span className="nav-text">Ver más tarde</span></button>
           <button className="nav-item" onMouseMove={handleMove}><span className="nav-ico like" /><span className="nav-text">Videos que me gustan</span></button>
-          <Link className="nav-item" href="/hub" onMouseMove={handleMove}>
+          <Link className={`nav-item ${pathname?.startsWith('/hub') ? 'active' : ''}`} href="/hub" onMouseMove={handleMove}>
             <span className="nav-ico videos" />
             <span className="nav-text">Tus videos</span>
           </Link>
@@ -146,7 +146,7 @@ export default function AppSidebar() {
 
         <div className="menu-section">
           <div className="menu-title">Personal</div>
-          <Link className="nav-item" href="/portfolio" onMouseMove={handleMove}>
+          <Link className={`nav-item ${pathname?.startsWith('/portfolio') ? 'active' : ''}`} href="/portfolio" onMouseMove={handleMove}>
             <span className="nav-ico portfolio" />
             <span className="nav-text">Portfolio</span>
           </Link>

@@ -88,6 +88,52 @@ bun run lint`}
       </section>
 
       <section className="home-section">
+        <div className="section-title">Next.js 16 Demos</div>
+        <div className="home-grid">
+          <div className="home-card">
+            <div className="demo-thumb">
+              <div className="badge">Server Actions</div>
+              <div className="demo-code">
+                <div className="code-line hl" />
+                <div className="code-line" />
+                <div className="code-line" />
+              </div>
+              <div className="demo-skeleton" />
+            </div>
+            <div className="home-body">
+              <div className="home-title">Acciones de servidor</div>
+              <div className="home-meta">Procesamiento y validación sin API extra.</div>
+            </div>
+          </div>
+          <div className="home-card">
+            <div className="demo-thumb">
+              <div className="badge">App Router</div>
+              <div className="demo-code">
+                <div className="code-line" />
+                <div className="code-line hl" />
+                <div className="code-line" />
+              </div>
+              <div className="demo-progress"><div className="bar" /></div>
+            </div>
+            <div className="home-body">
+              <div className="home-title">Transiciones y layouts</div>
+              <div className="home-meta">Rutas anidadas, streaming y caching.</div>
+            </div>
+          </div>
+          <div className="home-card">
+            <div className="demo-thumb">
+              <div className="badge">Turbopack</div>
+              <div className="demo-progress"><div className="bar" /></div>
+            </div>
+            <div className="home-body">
+              <div className="home-title">Dev ultra-rápido</div>
+              <div className="home-meta">Compilación incremental y HMR veloz.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-section">
         <div className="section-title">Videos recientes</div>
         <div className="home-grid">
           {recent.length ? recent.map((v: any, i: number) => (
