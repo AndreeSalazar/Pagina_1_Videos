@@ -39,6 +39,14 @@ export default async function PortfolioPage() {
       </section>
 
       <section className="home-section">
+        <div className="metrics" aria-label="Métricas principales">
+          <div className="metric"><div className="num">5+</div><div className="label">años experiencia</div></div>
+          <div className="metric"><div className="num">25+</div><div className="label">proyectos entregados</div></div>
+          <div className="metric"><div className="num">6</div><div className="label">apps en producción</div></div>
+        </div>
+      </section>
+
+      <section className="home-section">
         <div className="section-title">Ficha técnica</div>
         <div className="notes">
           <div className="note"><div className="note-title">Framework</div><div className="note-text">Next.js 16 (App Router, Turbopack)</div></div>
@@ -88,6 +96,39 @@ bun run lint`}
       </section>
 
       <section className="home-section">
+        <div className="section-title">Servicios</div>
+        <div className="home-grid">
+          <div className="home-card service-card">
+            <div className="service-thumb">
+              <div className="badge">UI Engineering</div>
+            </div>
+            <div className="home-body">
+              <div className="home-title">Interfaces limpias y accesibles</div>
+              <div className="home-meta">Sistemas de diseño, microinteracciones y consistencia visual.</div>
+            </div>
+          </div>
+          <div className="home-card service-card">
+            <div className="service-thumb">
+              <div className="badge">Performance</div>
+            </div>
+            <div className="home-body">
+              <div className="home-title">Optimización y SEO técnico</div>
+              <div className="home-meta">Medición, lazy, caching y mejoras en Core Web Vitals.</div>
+            </div>
+          </div>
+          <div className="home-card service-card">
+            <div className="service-thumb">
+              <div className="badge">Streaming UIs</div>
+            </div>
+            <div className="home-body">
+              <div className="home-title">Contenido y comunidad</div>
+              <div className="home-meta">Feeds, chat en vivo y experiencias en tiempo real.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-section">
         <div className="section-title">Next.js 16 Demos</div>
         <div className="home-grid">
           <div className="home-card">
@@ -129,6 +170,29 @@ bun run lint`}
               <div className="home-title">Dev ultra-rápido</div>
               <div className="home-meta">Compilación incremental y HMR veloz.</div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-section">
+        <div className="section-title">Sobre mí</div>
+        <div className="about">
+          <p className="about-text">Me enfoco en crear productos con alto nivel de detalle: UI elegante, accesible y rápida. Disfruto llevar ideas a producción con un stack moderno y buenas prácticas.</p>
+          <ul className="about-list">
+            <li>Diseño de componentes reutilizables</li>
+            <li>Medición y mejora continua de performance</li>
+            <li>Experiencias de contenidos (videos, streaming, feeds)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section className="home-section">
+        <div className="cta-panel">
+          <div className="cta-title">¿Construimos algo excelente?</div>
+          <div className="cta-sub">Estoy abierto a colaborar en UI, performance y productos de contenidos.</div>
+          <div className="hero-actions">
+            <Link href="/hub" className="btn-primary">Ver trabajos</Link>
+            <Link href="/" className="btn-secondary">Inicio</Link>
           </div>
         </div>
       </section>

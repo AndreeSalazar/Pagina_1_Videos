@@ -9,6 +9,7 @@ const nextConfig = {
   experimental: {
     serverActions: {}
   },
+  devIndicators: false,
   turbopack: {
     root: workspaceRoot
   }
