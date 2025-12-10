@@ -155,11 +155,22 @@ body.app-body { margin: 0; background: var(--bg); color: var(--text); font-famil
 .nav-item:hover { background: #151515; border-color: var(--border); transform: translateX(1px); }
 .nav-item.more { color: var(--muted); }
 
-.nav-ico { width: 20px; height: 20px; border-radius: 6px; border: 1px solid var(--border); background: #1d1d1d; display: inline-block; }
-.nav-ico.home { background: linear-gradient(135deg, #1d1d1d, #222); }
-.nav-ico.shorts { background: linear-gradient(135deg, #1d1d1d, #222); }
-.nav-ico.more { background: #1d1d1d; }
-.nav-ico.history, .nav-ico.playlist, .nav-ico.later, .nav-ico.like, .nav-ico.videos, .nav-ico.downloads, .nav-ico.explore, .nav-ico.music, .nav-ico.gaming { background: #1d1d1d; }
+.nav-ico { width: 20px; height: 20px; display: inline-block; border-radius: 6px; border: 1px solid var(--border); background-color: currentColor; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; -webkit-mask-size: 20px 20px; mask-size: 20px 20px; }
+.nav-ico.sm { width: 16px; height: 16px; -webkit-mask-size: 16px 16px; mask-size: 16px 16px; }
+.nav-ico.lg { width: 22px; height: 22px; -webkit-mask-size: 22px 22px; mask-size: 22px 22px; }
+.nav-ico.home { -webkit-mask-image: url('/icons/home.svg'); mask-image: url('/icons/home.svg'); }
+.nav-ico.shorts { -webkit-mask-image: url('/icons/shorts.svg'); mask-image: url('/icons/shorts.svg'); }
+.nav-ico.more { -webkit-mask-image: url('/icons/more.svg'); mask-image: url('/icons/more.svg'); }
+.nav-ico.history { -webkit-mask-image: url('/icons/history.svg'); mask-image: url('/icons/history.svg'); }
+.nav-ico.playlist { -webkit-mask-image: url('/icons/playlist.svg'); mask-image: url('/icons/playlist.svg'); }
+.nav-ico.later { -webkit-mask-image: url('/icons/later.svg'); mask-image: url('/icons/later.svg'); }
+.nav-ico.like { -webkit-mask-image: url('/icons/like.svg'); mask-image: url('/icons/like.svg'); }
+.nav-ico.videos { -webkit-mask-image: url('/icons/videos.svg'); mask-image: url('/icons/videos.svg'); }
+.nav-ico.downloads { -webkit-mask-image: url('/icons/downloads.svg'); mask-image: url('/icons/downloads.svg'); }
+.nav-ico.explore { -webkit-mask-image: url('/icons/explore.svg'); mask-image: url('/icons/explore.svg'); }
+.nav-ico.music { -webkit-mask-image: url('/icons/music.svg'); mask-image: url('/icons/music.svg'); }
+.nav-ico.gaming { -webkit-mask-image: url('/icons/gaming.svg'); mask-image: url('/icons/gaming.svg'); }
+.nav-ico.portfolio { -webkit-mask-image: url('/icons/portfolio.svg'); mask-image: url('/icons/portfolio.svg'); }
 
 .avatar { width: 20px; height: 20px; border-radius: 50%; background: #222; border: 1px solid var(--border); display: inline-grid; place-items: center; font-size: 12px; font-weight: 700; }
 .live { width: 6px; height: 6px; border-radius: 3px; background: #ef4444; justify-self: end; box-shadow: 0 0 0 2px rgba(239,68,68,.25); animation: pulse 1.8s infinite; }

@@ -110,13 +110,26 @@ export default function AppSidebar() {
         <div className="menu-divider" />
 
         <div className="menu-section">
-          <div className="menu-title">Tú</div>
+          <div className="menu-title">Videos</div>
           <button className="nav-item" onMouseMove={handleMove}><span className="nav-ico history" /><span className="nav-text">Historial</span></button>
           <button className="nav-item" onMouseMove={handleMove}><span className="nav-ico playlist" /><span className="nav-text">Playlists</span></button>
           <button className="nav-item" onMouseMove={handleMove}><span className="nav-ico later" /><span className="nav-text">Ver más tarde</span></button>
           <button className="nav-item" onMouseMove={handleMove}><span className="nav-ico like" /><span className="nav-text">Videos que me gustan</span></button>
-          <button className="nav-item" onMouseMove={handleMove}><span className="nav-ico videos" /><span className="nav-text">Tus videos</span></button>
+          <Link className="nav-item" href="/hub" onMouseMove={handleMove}>
+            <span className="nav-ico videos" />
+            <span className="nav-text">Tus videos</span>
+          </Link>
           <button className="nav-item" onMouseMove={handleMove}><span className="nav-ico downloads" /><span className="nav-text">Descargas</span></button>
+        </div>
+
+        <div className="menu-divider" />
+
+        <div className="menu-section">
+          <div className="menu-title">Personal</div>
+          <Link className="nav-item" href="/portfolio" onMouseMove={handleMove}>
+            <span className="nav-ico portfolio" />
+            <span className="nav-text">Portfolio</span>
+          </Link>
         </div>
 
         <div className="menu-divider" />
@@ -141,4 +154,3 @@ export default function AppSidebar() {
     </>
   );
 }
-

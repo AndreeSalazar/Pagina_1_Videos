@@ -24,15 +24,15 @@ Esta guía documenta cómo está montado el proyecto para ejecutar el Frontend (
     ```
 - Si no se define, el código usa `http://localhost:5000` por defecto.
 
-## Arranque en desarrollo
+## Arranque en desarrollo (Bun)
 - Backend:
-  - `pnpm -C server dev`
-  - Ver `server listening on 5000` en la consola.
-- Frontend (puerto por defecto 3000):
-  - `pnpm -C apps/next run dev`
+  - Entra a `server/` y ejecuta `bun run dev`
+  - Verás `server listening on 5000` en la consola.
+- Frontend Next (puerto por defecto 3000):
+  - Entra a `apps/next/` y ejecuta `bun run dev`
 - Frontend en otro puerto (ej. 3001/3002):
-  - `pnpm -C apps/next exec next dev -p 3001`
-  - `pnpm -C apps/next exec next dev -p 3002`
+  - En `apps/next/` puedes usar `bunx next dev -p 3001`
+  - O `bunx next dev -p 3002`
 
 ## Flujo funcional (tipo YouTube + Discord)
 - Hub y Watch:
@@ -96,10 +96,9 @@ Esta guía documenta cómo está montado el proyecto para ejecutar el Frontend (
   - Endpoints de vista/like.
   - Chat con `GET/POST /messages` y control de canal.
 
-## Comandos útiles
-- Backend dev: `pnpm -C server dev`
-- Frontend dev (3000): `pnpm -C apps/next run dev`
-- Frontend dev (3001/3002): `pnpm -C apps/next exec next dev -p 3001`
+## Comandos útiles (Bun)
+- Backend dev: `bun run dev` (desde `server/`)
+- Frontend dev (3000): `bun run dev` (desde `apps/next/`)
+- Frontend dev (3001/3002): `bunx next dev -p 3001` (desde `apps/next/`)
 - Health check: `curl http://localhost:5000/api/health`
 - Proyectos: `curl http://localhost:5000/api/projects`
-
