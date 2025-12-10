@@ -65,11 +65,7 @@ body.app-body { margin: 0; background: var(--bg); color: var(--text); font-famil
 .profile button { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; }
 
 /* Hub */
-.hub-container { display: grid; grid-template-columns: 80px 1fr 340px; gap: 0; height: calc(100vh - var(--header-h)); }
-.hub-sidebar { width: 80px; background: var(--bg-elev); border-right: 1px solid var(--border); padding: 8px; }
-.hub-sidebar .circle { width: 56px; height: 56px; border-radius: 28px; background: #222; color: var(--text); border: 1px solid var(--border); display: grid; place-items: center; }
-.hub-sidebar .circle.active { border: 2px solid var(--accent); }
-.hub-sidebar .add { background: #111; }
+.hub-container { display: grid; grid-template-columns: 1fr 340px; gap: 0; height: calc(100vh - var(--header-h)); }
 
 .hub-content { padding: 12px; }
 .hub-toolbar { display: flex; gap: 8px; margin-bottom: 12px; }

@@ -2,19 +2,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 
-function ChannelBar({ channels, selected, onSelect, onAdd }: any) {
-  return (
-    <div style={{ width: 80, background: '#111', color: '#eee', padding: 8 }}>
-      <div style={{ display: 'grid', gap: 8 }}>
-        {channels.map((c: any) => (
-          <button key={c._id} onClick={() => onSelect(c._id)} style={{ width: 56, height: 56, borderRadius: 28, border: selected===c._id?'2px solid #09f':'none' }}>{c.name[0]}</button>
-        ))}
-        <button onClick={onAdd} style={{ width: 56, height: 56, borderRadius: 28 }}>+</button>
-      </div>
-    </div>
-  );
-}
-
 function VideoCard({ v, onPlay, onDelete }: any) {
   return (
     <div className="video-card">
@@ -176,8 +163,6 @@ export default function HubClient() {
   const [sort, setSort] = useState<'relevantes'|'recientes'>('relevantes');
   const qTimer = useRef<any>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  const [addingChannel, setAddingChannel] = useState(false);
-  const [channelName, setChannelName] = useState('');
   useEffect(() => {
     try {
       const savedC = localStorage.getItem('hub-selected-channel');
@@ -233,17 +218,6 @@ export default function HubClient() {
     return () => window.removeEventListener('keydown', onKey);
   }, [channels, params]);
 
-  const addChannel = () => { setAddingChannel(true); setChannelName(''); };
-  const confirmAddChannel = async () => {
-    const base = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
-    const name = channelName.trim();
-    if (!name) { setAddingChannel(false); return; }
-    const res = await fetch(`${base}/api/hub/channels`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name }) });
-    const created = await res.json();
-    setChannels(prev => [...prev, created]);
-    setAddingChannel(false); setChannelName('');
-  };
-
   const addVideo = async () => {
     const base = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
     if (!newVideo.title || !newVideo.src) return;
@@ -277,24 +251,6 @@ export default function HubClient() {
 
   return (
     <div className="hub-container">
-      <div className="hub-sidebar">
-        <div style={{ display: 'grid', gap: 8 }}>
-          {channels.map((c: any) => (
-            <button
-              key={c._id}
-              onClick={() => {
-                setSelectedChannel(c._id);
-                try { localStorage.setItem('hub-selected-channel', c._id); } catch {}
-                const sp = new URLSearchParams(params.toString());
-                sp.set('c', c._id);
-                router.replace(`/hub?${sp.toString()}`);
-              }}
-              className={`circle ${selectedChannel===c._id?'active':''}`}
-            >{c.name[0]}</button>
-          ))}
-          <button onClick={addChannel} className="circle add">+</button>
-        </div>
-      </div>
       <div className="hub-content">
         <div className="hub-toolbar">
           <input ref={searchRef} value={q} onChange={e => setQ(e.target.value)} placeholder="Buscar" />
@@ -350,15 +306,6 @@ export default function HubClient() {
     <div className="hub-chat">
       <HubChat channelId={selectedChannel} />
     </div>
-    {addingChannel ? (
-      <div style={{ position: 'fixed', right: 12, bottom: 12, zIndex: 70 }}>
-        <div style={{ maxWidth: 360, background: 'var(--bg-elev)', border: '1px solid var(--border)', borderRadius: 10, padding: 8, display: 'grid', gridTemplateColumns: '1fr auto auto', gap: 8 }}>
-          <input autoFocus value={channelName} onChange={e => setChannelName(e.target.value)} placeholder="Nombre del canal" style={{ background: '#111', border: '1px solid var(--border)', color: 'var(--text)', borderRadius: 8, padding: 8 }} />
-          <button onClick={confirmAddChannel} style={{ background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 10px' }}>Crear</button>
-          <button onClick={() => { setAddingChannel(false); setChannelName(''); }} style={{ background: 'var(--bg-elev)', color: 'var(--text)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 10px' }}>Cancelar</button>
-        </div>
-      </div>
-    ) : null}
   </div>
   );
 }

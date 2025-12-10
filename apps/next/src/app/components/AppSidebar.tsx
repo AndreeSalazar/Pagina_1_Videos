@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 export default function AppSidebar() {
@@ -9,6 +9,7 @@ export default function AppSidebar() {
   const params = useSearchParams();
   const [open, setOpen] = useState(true);
   const [channels, setChannels] = useState<any[]>([]);
+  const [activeCat, setActiveCat] = useState<string | null>(null);
   const [showMoreSubs, setShowMoreSubs] = useState(false);
   const [adding, setAdding] = useState(false);
   const [newName, setNewName] = useState('');
@@ -44,7 +45,26 @@ export default function AppSidebar() {
     });
   }, []);
 
-  const subs = showMoreSubs ? channels : channels.slice(0, 6);
+  const categories = useMemo(() => {
+    const grouped: Record<string, any[]> = {};
+    channels.forEach((c) => {
+      const n = String(c.name || '').toLowerCase();
+      let cat = 'General';
+      if (/(dev|desarrollo|code)/.test(n)) cat = 'Dev';
+      else if (/(music|música|musica)/.test(n)) cat = 'Music';
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(c);
+    });
+    return Object.entries(grouped).map(([name, list]) => ({ id: name.toLowerCase(), name, channels: list }));
+  }, [channels]);
+
+  useEffect(() => {
+    if (!activeCat && categories.length) setActiveCat(categories[0].id);
+  }, [categories, activeCat]);
+
+  const currentCat = categories.find((x) => x.id === activeCat);
+  const subsBase = currentCat ? currentCat.channels : channels;
+  const subs = showMoreSubs ? subsBase : subsBase.slice(0, 6);
   const activeChannel = pathname?.startsWith('/hub') ? (params.get('c') || null) : null;
   const selectChannel = (id: string) => { router.push(`/hub?c=${id}`); };
   const addChannel = () => { setAdding(true); setNewName(''); };
@@ -65,10 +85,10 @@ export default function AppSidebar() {
     <>
     <aside className={`app-sidebar ${open ? "open" : "closed"}`} aria-label="Navegación principal">
       <div className="rail">
-        {channels.slice(0, 8).map((c: any) => (
-          <button key={c._id} className={`rail-item ${activeChannel===c._id? 'active':''}`} title={c.name} onClick={() => selectChannel(c._id)}>
+        {categories.map((cat) => (
+          <button key={cat.id} className={`rail-item ${activeCat===cat.id? 'active':''}`} title={cat.name} onClick={() => setActiveCat(cat.id)}>
             <span className="rail-dot" />
-            <span className="rail-text">{c.name[0]}</span>
+            <span className="rail-text">{cat.name[0]}</span>
           </button>
         ))}
         <button className="rail-item add" title="Agregar" onClick={addChannel}>
@@ -91,15 +111,15 @@ export default function AppSidebar() {
         <div className="menu-divider" />
 
         <div className="menu-section">
-          <div className="menu-title">Suscripciones</div>
+          <div className="menu-title">Suscripciones{currentCat ? ` · ${currentCat.name}` : ''}</div>
           {subs.map((c: any) => (
-            <button key={c._id} className="nav-item" aria-label={`Suscripción ${c.name}`} onMouseMove={handleMove}>
+            <button key={c._id} className="nav-item" aria-label={`Suscripción ${c.name}`} onMouseMove={handleMove} onClick={() => selectChannel(c._id)}>
               <span className="avatar" aria-hidden>{c.name[0]}</span>
               <span className="nav-text">{c.name}</span>
               <span className="live" />
             </button>
           ))}
-          {channels.length > 6 && (
+          {subsBase.length > 6 && (
             <button className="nav-item more" onMouseMove={handleMove} onClick={() => setShowMoreSubs((v) => !v)}>
               <span className="nav-ico more" />
               <span className="nav-text">{showMoreSubs ? "Mostrar menos" : "Mostrar más"}</span>
